@@ -51,37 +51,58 @@ void saveANDload(){
 }
 
 void removeItemList(){
-    /*Pesquisar como remover item de uma lista vindo de um struct*/
-    /*Descobri talvez uma alternativa, alterando os valores para NULL, porem preciso ter certeza de como filtrar */
+    char excludeByName[100];
+    printf("Qual o nome da tarefa que voce deseja excluir? ");
+    scanf(" %[^\n]", excludeByName);
+    for(int i = 0; i < totalItens; i++ ){
+        if(strcmp(excludeByName, list[i].itemName) == 0){
+            int UserConfirmationDel = 0;
+            printf("Voce tem certeza de que deseja excluir essa tarefa? 0 para NAO 1 para SIM");
+            scanf("%d", &UserConfirmationDel);
+            switch (UserConfirmationDel)
+            {
+            case 1:
+               /* list[i].itemName = "";  TEM ERROS NESSA FUNCAO, IREI ALTERAR EM CASA!*/
+                list[i].priority = NULL;
+                list[i].done = NULL;
+                break;
+            case 0:
+                printf("Finalizando a aplicacao, nenhuma alteracao foi efetuada!\n");
+                break;
+            default:
+                break;
+            }
+
+        }
+    }
 }
 
 void check(){
-    ptr_items = &list[totalItens];
-    fptr = open("list.txt", "w");
-    if(fptr==NULL){
-        printf("Error! Voce nao possui itens em sua lista, por favor adicione!");
-        saveItemInList();
-    }
     char filterByName[100];
     printf("Qual o nome da tarefa que voce deseja marcar como concluida? ");
     scanf(" %[^\n]", filterByName);
-    if(filterByName == items.itemName){
-        int UserConfirmation = 0;
-        printf("Irei alterar a tarefa para CONCLUIDA, voce confirma? 1 para SIM 0 para NAO: ");
-        scanf("%d", &UserConfirmation);
-        switch (UserConfirmation)
-        {
-        case 1:
-            items.done = 1;
-            break;
-        case 0:
-            printf("Finalizando a aplicacao, nenhum dado foi alterado!");
-            break;
-        default:
-            printf("ERROR! Voce esta inserindo valores que nao correspondem a nenhuma opcao!");
-            break;
+    for(int i=0; i<totalItens; i++){
+        /*STRCAMP compara duas strings e verifica qual delas e maior, como aqui eu do igual zero, entao confirmo que elas sao do mesmo tamanho*/
+        if(strcamp(filterByName, list[i].itemName) == 0){
+            int UserConfirmation = 0;
+            printf("Irei alterar a tarefa para CONCLUIDA, voce confirma? 1 para SIM 0 para NAO: ");
+            scanf("%d", &UserConfirmation);
+            switch (UserConfirmation)
+            {
+            case 1:
+                list[i].done = 1;
+                printf("Tarefa '%s' marcada como concluida!\n", list[i].itemName);
+                saveANDload();
+                break;
+            case 0:
+                printf("Finalizando a aplicacao, nenhum dado foi alterado!");
+                break;
+            default:
+                printf("ERROR! Voce esta inserindo valores que nao correspondem a nenhuma opcao!");
+                break;
+            }
         }
-    }
+    }    
 }
 
 void readList(){
@@ -110,7 +131,7 @@ void readList(){
             printf("%s", list->itemName);
             break;
         default:
-            printf("Voce esta inserindo um valor invalido.");
+            printf("Voce deseja filtrar por ");
             break;
         }
             
@@ -124,5 +145,26 @@ void readList(){
 
 }
 int main(){
+    int escolhas = 0;
+
+    printf("\n---------------------BEM-VINDO---------------------\n");
+    printf("Essa eh uma aplicacao totalmente feita em C, para organizar uma to-do-list!\n");
+    printf("1 --> Adicionar uma Tarefa\n");
+    printf("2 --> Remover uma Tarefa\n");
+    printf("3 --> Visualizar Tarefas\n");
+    printf("4 --> Marcar como concluida\n");
+    printf("5 --> Salvar e carregar\n");
+    switch (escolhas)
+    {
+    case 1:
+        addItemList();
+        
+        break;
+    
+    default:
+        break;
+    }
+
+
     return 0;
 }
