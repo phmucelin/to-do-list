@@ -52,6 +52,7 @@ void saveANDload(){
 
 void removeItemList(){
     /*Pesquisar como remover item de uma lista vindo de um struct*/
+    /*Descobri talvez uma alternativa, alterando os valores para NULL, porem preciso ter certeza de como filtrar */
 }
 
 void check(){
