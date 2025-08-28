@@ -25,7 +25,7 @@ void addItemList(){
     printf("Digite o nome da tarefa: ");
     scanf(" %[^\n]", list[totalItens].itemName);
 
-    printf("Qual a prioridade deste item? ");
+    printf("Qual a prioridade deste item 1-5? ");
     scanf("%d", &list[totalItens].priority);
 
     printf("Este item ja foi realizado? 0 NAO, 1 SIM");
@@ -63,8 +63,8 @@ void removeItemList(){
             {
             case 1:
                /* list[i].itemName = "";  TEM ERROS NESSA FUNCAO, IREI ALTERAR EM CASA!*/
-                list[i].priority = NULL;
-                list[i].done = NULL;
+                // list[i].priority = NULL;
+                // list[i].done = NULL;
                 break;
             case 0:
                 printf("Finalizando a aplicacao, nenhuma alteracao foi efetuada!\n");
@@ -83,7 +83,7 @@ void check(){
     scanf(" %[^\n]", filterByName);
     for(int i=0; i<totalItens; i++){
         /*STRCAMP compara duas strings e verifica qual delas e maior, como aqui eu do igual zero, entao confirmo que elas sao do mesmo tamanho*/
-        if(strcamp(filterByName, list[i].itemName) == 0){
+        if(strcmp(filterByName, list[i].itemName) == 0){
             int UserConfirmation = 0;
             printf("Irei alterar a tarefa para CONCLUIDA, voce confirma? 1 para SIM 0 para NAO: ");
             scanf("%d", &UserConfirmation);
@@ -104,7 +104,7 @@ void check(){
         }
     }    
 }
-
+/*Sei que tem um pequeno erro de logica nessa funcao, o que torna ela meio inutil, irei arrumar*/
 void readList(){
     int escolha = 0;
     fptr = fopen("list.txt", "r");
@@ -113,32 +113,33 @@ void readList(){
         printf("Voce deve inserir elementos em sua lista antes de lista-los.\n");
         return;
     }
-    printf("Voce deseja filtrar a sua pesquisa? 0 SIM 1 NAO: ");
+    printf("Voce deseja filtrar a sua pesquisa? 0 SIM | 1 NAO: ");
     scanf("%d", &escolha);
-    if(escolha==1){
+    if(escolha==0){
         int concluedorno = 0;
         printf("Voce deseja filtrar por CONCLUIDAS ou por NAO CONCLUIDAS: 0 CONCLUIDAS 1 NAO CONCLUIDAS");
         scanf("%d", &concluedorno);
         switch (concluedorno)
         {
         case 1:
-            if(list->done == NULL){
+            if(list->done = 0){
             printf("Os itens que nao foram marcados como feitos, sao: \n");
             printf("%s",list->itemName);
+            }
             break;
         case 2:
             printf("Itens concluidos: \n");
             printf("%s", list->itemName);
             break;
         default:
-            printf("Voce deseja filtrar por ");
+            printf("ERROR");
             break;
-        }
             
         }
     }else{
-        while(fgets(MAX_ITENS, sizeof(MAX_ITENS), fptr)){
-            printf("%s", MAX_ITENS);
+        char linha[100];
+        while(fgets(linha, sizeof(linha), fptr)){
+            printf(" %s", linha);
         }
     }
     fclose(fptr);
@@ -146,7 +147,7 @@ void readList(){
 }
 int main(){
     int escolhas = 0;
-
+    while(escolhas != 6){
     printf("\n---------------------BEM-VINDO---------------------\n");
     printf("Essa eh uma aplicacao totalmente feita em C, para organizar uma to-do-list!\n");
     printf("1 --> Adicionar uma Tarefa\n");
@@ -154,17 +155,34 @@ int main(){
     printf("3 --> Visualizar Tarefas\n");
     printf("4 --> Marcar como concluida\n");
     printf("5 --> Salvar e carregar\n");
-    switch (escolhas)
-    {
-    case 1:
-        addItemList();
-        
-        break;
-    
-    default:
-        break;
-    }
+    printf("6 --> Sair\n");
+    printf("Qual e a sua escolha? ");
+    scanf("%d", &escolhas);
+        switch (escolhas)
+        {
+        case 1:
+            addItemList();
+            
+            break;
+        case 2:
+            removeItemList();
+            break;
 
+        case 3:
+            readList();
+            break;
+
+        case 4:
+            check();
+            break;
+
+        case 5:
+            saveANDload();
+            break;
+        default:
+            break;
+        }
+    }      
 
     return 0;
 }
