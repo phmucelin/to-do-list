@@ -14,7 +14,7 @@ item list[MAX_ITENS];
 int totalItens = 0;
 struct todoList items, *ptr_items;
 
-
+/*CONCLUIDO*/
 void addItemList(){
     if(totalItens >= MAX_ITENS){
         printf("Voce ja atingiu o numero maximo de tarefas");
@@ -50,21 +50,27 @@ void saveANDload(){
     printf("Voce salvou suas tarefas na sua lista!\n");
 }
 
+/*CONCLUIDO*/
+
 void removeItemList(){
     char excludeByName[100];
+    int found = 0;
     printf("Qual o nome da tarefa que voce deseja excluir? ");
     scanf(" %[^\n]", excludeByName);
     for(int i = 0; i < totalItens; i++ ){
         if(strcmp(excludeByName, list[i].itemName) == 0){
             int UserConfirmationDel = 0;
+            found = 1;
             printf("Voce tem certeza de que deseja excluir essa tarefa? 0 para NAO 1 para SIM");
             scanf("%d", &UserConfirmationDel);
             switch (UserConfirmationDel)
             {
             case 1:
-               /* list[i].itemName = "";  TEM ERROS NESSA FUNCAO, IREI ALTERAR EM CASA!*/
-                // list[i].priority = NULL;
-                // list[i].done = NULL;
+                for(int j=i;j<totalItens -1;j++){
+                    list[j] = list[j+1];
+                }
+                totalItens--;
+                printf("Tarefa removida com sucesso!\n");
                 break;
             case 0:
                 printf("Finalizando a aplicacao, nenhuma alteracao foi efetuada!\n");
@@ -73,8 +79,14 @@ void removeItemList(){
                 break;
             }
 
+        }else{
+            printf("Remocao cancelada!\n");
+            break;
         }
     }
+    if(found == 0){
+        printf("Tarefa nao encontrada!\n");
+    }   
 }
 
 void check(){
@@ -104,47 +116,50 @@ void check(){
         }
     }    
 }
-/*Sei que tem um pequeno erro de logica nessa funcao, o que torna ela meio inutil, irei arrumar*/
-void readList(){
-    int escolha = 0;
-    fptr = fopen("list.txt", "r");
 
-    if(fptr == NULL){
-        printf("Voce deve inserir elementos em sua lista antes de lista-los.\n");
-        return;
-    }
-    printf("Voce deseja filtrar a sua pesquisa? 0 SIM | 1 NAO: ");
-    scanf("%d", &escolha);
-    if(escolha==0){
-        int concluedorno = 0;
-        printf("Voce deseja filtrar por CONCLUIDAS ou por NAO CONCLUIDAS: 0 CONCLUIDAS 1 NAO CONCLUIDAS");
-        scanf("%d", &concluedorno);
-        switch (concluedorno)
-        {
-        case 1:
-            if(list->done = 0){
-            printf("Os itens que nao foram marcados como feitos, sao: \n");
-            printf("%s",list->itemName);
-            }
-            break;
-        case 2:
-            printf("Itens concluidos: \n");
-            printf("%s", list->itemName);
-            break;
-        default:
-            printf("ERROR");
-            break;
-            
+/*CONCLUIDO*/
+
+void readList(){
+    int choice = 0;
+    char nameItem[100];
+    printf("Voce deseja filtrar? 1 - SIM | 0 - NAO");
+    scanf("%d", &choice);
+    if(choice == 0){
+        for(int i = 0; i < totalItens; i++){
+            printf("%s, %d, %d", 
+            list[i].itemName,
+            list[i].priority,
+            list[i].done);
         }
     }else{
-        char linha[100];
-        while(fgets(linha, sizeof(linha), fptr)){
-            printf(" %s", linha);
+        int escolha = 0;
+        printf("0  = CONCLUIDO | 1 = NAO CONCLUIDO");
+        switch (escolha)
+        {
+        case 1:
+            for(int i = 0; i< totalItens; i++){
+                if(list[i].done == 0){
+                    printf("%s", list[i].itemName);
+                }
+            }
+            printf("\nEssas sao as tarefas marcadas como NAO concluidas!\n");
+            break;
+        case 2:
+            for(int i = 0; i< totalItens; i++){
+                if(list[i].done == 1){
+                    printf("%s", list[i].itemName)
+                }
+            }
+            printf("\nEssas sao as tarefas marcadas como concluidas!\n");
+            break;
+
+        default:
+            break;
         }
     }
-    fclose(fptr);
-
 }
+
+
 int main(){
     int escolhas = 0;
     while(escolhas != 6){
