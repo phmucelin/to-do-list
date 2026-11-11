@@ -5,9 +5,11 @@
 FILE* fptr;
 typedef struct todoList
 {
+    
     char itemName[100];
     int priority;
     int done;
+
 }item;
 
 item list[MAX_ITENS];
